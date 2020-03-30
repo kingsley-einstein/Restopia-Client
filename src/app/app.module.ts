@@ -3,8 +3,9 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { NgModule } from "@angular/core";
 
 import { AppComponent } from "./app.component";
-import { MainComponent, FormClientComponent } from "./components";
-import { RoutingModule, ClarityDesignModule } from "./modules";
+import { MainComponent, FormClientComponent, SideNavComponent, TabsComponent, HistoryComponent, RegistrationComponent } from "./components";
+import { RoutingModule, ClarityDesignModule, FormModule } from "./modules";
+import { StorageService, HttpService, HistoryService } from "./services";
 import { ServiceWorkerModule } from "@angular/service-worker";
 import { environment } from "../environments/environment";
 
@@ -12,16 +13,25 @@ import { environment } from "../environments/environment";
   declarations: [
     AppComponent,
     MainComponent,
-    FormClientComponent
+    FormClientComponent,
+    SideNavComponent,
+    TabsComponent,
+    HistoryComponent,
+    RegistrationComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     ServiceWorkerModule.register("ngsw-worker.js", { enabled: environment.production }),
     RoutingModule,
-    ClarityDesignModule
+    ClarityDesignModule,
+    FormModule
   ],
-  providers: [],
+  providers: [
+    StorageService,
+    HttpService,
+    HistoryService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

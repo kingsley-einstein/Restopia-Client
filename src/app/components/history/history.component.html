@@ -1,0 +1,23 @@
+<div *ngIf="!!service.history">
+  <div *ngIf="service.history.length > 0" class="nav-group">
+    <ul class="nav-list">
+      <li *ngFor="let request of service.history">
+        <a class="nav-link" [routerLink]="request.url">
+          <span
+            class="label"
+            [ngClass]="{'label-primary': request.method === 'GET', 'label-success': request.method === 'POST', 'label-info': request.method === 'PATCH', 'label-warning': request.method === 'OPTIONS', 'label-danger': request.method === 'DELETE'}"
+          >
+            {{request.method}}
+          </span> {{request.url}}
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div *ngIf="service.history.length === 0" class="nav-group">
+    <label>There is no history to show.</label>
+  </div>
+</div>
+
+<div *ngIf="!service.history" class="nav-group">
+  <label>There is no history to show.</label>
+</div>

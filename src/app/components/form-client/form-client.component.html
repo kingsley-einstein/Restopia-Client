@@ -1,1 +1,63 @@
-<p>Form goes here</p>
+<div class="container">
+  <div class="clr-row">
+    <div class="clr-col-lg-1 clr-col-xl-1"></div>
+    <div class="clr-col-lg-10 clr-col-xl-10 clr-col-sm-12 clr-col-md-12">
+      <form clrForm clrLayout="horizontal" clrLabelSize="4">
+        <div class="clr-row">
+          <div class="clr-col-lg-2 clr-col-xl-2 clr-col-sm-2 clr-col-md-2">
+            <clr-select-container>
+              <select clrSelect name="options" [(ngModel)]="method" [ngModelOptions]="{ 'standalone': true }" (change)="logMethod()">
+                <option *ngFor="let method of allowedMethods" [value]="method.value">
+                  {{method.name}}
+                </option>
+              </select>
+            </clr-select-container>
+          </div>
+          <div class="clr-col-lg-8 clr-col-xl-8 clr-col-sm-8 clr-col-md-8">
+            <clr-input-container>
+              <input clrInput type="text" placeholder="Enter Url" [(ngModel)]="url" [ngModelOptions]="{ 'standalone' : true }" />
+            </clr-input-container>
+          </div>
+          <div class="clr-col-lg-2 clr-col-xl-2 clr-col-sm-2 clr-col-md-2">
+            <button
+              class="btn btn-success btn-md"
+              [disabled]="url.trim().length === 0"
+              (click)="addToLocalStorage()"
+            >
+            Send
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="clr-col-lg-1 clr-col-xl-1"></div>
+  </div>
+  <div class="clr-row">
+    <div class="clr-col-lg-6 clr-col-xl-6 clr-col-sm-12 clr-col-md-12">
+      <form clrForm>
+        <clr-textarea-container>
+          <label>Body</label>
+          <textarea class="body" rows="5" clrTextarea (keydown)="formatJson($event)"></textarea>
+        </clr-textarea-container>
+      </form>
+    </div>
+    <div class="clr-col-lg-6 clr-col-xl-6 clr-col-sm-12 clr-col-md-12">
+      <form clrForm>
+        <clr-textarea-container>
+          <label>Headers</label>
+          <textarea class="headers" rows="5" clrTextarea (keydown)="formatJson($event)"></textarea>
+        </clr-textarea-container>
+      </form>
+    </div>
+  </div>
+  <div class="clr-row">
+    <div class="clr-col-lg-12 clr-col-xl-12 clr-col-sm-12 clr-col-md-12">
+      <form clrForm>
+        <clr-textarea-container>
+          <label>Response</label>
+          <textarea rows="5" clrTextarea readonly></textarea>
+        </clr-textarea-container>
+      </form>
+    </div>
+  </div>
+</div>

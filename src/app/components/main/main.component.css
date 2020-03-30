@@ -1,0 +1,9 @@
+/* .content-area {
+  overflow: scroll;
+} */
+
+clr-header {
+  overflow-x: scroll;
+  overflow-y: hidden;
+  scrollbar-color: transparent;
+}

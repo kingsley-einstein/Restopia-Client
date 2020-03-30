@@ -1,0 +1,23 @@
+<clr-tabs>
+  <clr-tab *ngFor="let tab of tabs">
+    <button clrTabLink [id]="tab.id" (click)="logTabStates()">
+      {{tab.name}}
+      <button *ngIf="tabs.length > 1" class="cancel" (click)="removeTab(tab.id)">
+        <clr-icon shape="close"></clr-icon>
+      </button>
+    </button>
+    <ng-template [(clrIfActive)]="tabsActiveState[tab.id]">
+      <clr-tab-content>
+        <app-form-client></app-form-client>
+      </clr-tab-content>
+    </ng-template>
+  </clr-tab>
+  <clr-tab>
+    <button clrTabLink (click)="addTab()">
+      <clr-icon shape="plus"></clr-icon>
+    </button>
+    <!-- <ng-template [(clrIfActive)]="btnActive">
+      <clr-tab-content></clr-tab-content>
+    </ng-template> -->
+  </clr-tab>
+</clr-tabs>

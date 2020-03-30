@@ -1,0 +1,13 @@
+/* @media screen and (max-width: 720px) {
+  clr-main-container {
+    height: 180vh;
+  }
+} */
+
+clr-main-container {
+  overflow-y: scroll;
+}
+
+/* .content-area {
+  overflow: scroll;
+} */

@@ -1,0 +1,15 @@
+form {
+  text-align: center;
+}
+
+input {
+  width: 80%;
+}
+
+.container {
+  width: 100%;
+}
+
+.submit {
+  margin-top: 12px;
+}

@@ -1,0 +1,28 @@
+<div class="container">
+  <div class="clr-row">
+    <div class="clr-col-lg-1 clr-col-xl-1"></div>
+    <div class="clr-col-lg-10 clr-col-xl-10 clr-col-sm-12 clr-col-md-12">
+      <form clrForm [formGroup]="fg">
+        <clr-input-container>
+          <label>Email</label>
+          <input clrInput type="email" formControlName="email" />
+          <clr-control-error *clrIfError="'required'">This field is required.</clr-control-error>
+          <clr-control-error *clrIfError="'email'">Email is not valid.</clr-control-error>
+        </clr-input-container>
+        <clr-input-container>
+          <label>Password</label>
+          <input clrInput type="password" formControlName="password" />
+          <clr-control-error *clrIfError="'required'">This field is required.</clr-control-error>
+        </clr-input-container>
+        <clr-input-container>
+          <label>Confirm Password</label>
+          <input clrInput type="password" formControlName="confirmPassword" />
+          <clr-control-error *clrIfError="'nomatch'">Passwords do not match.</clr-control-error>
+          <clr-control-error *clrIfError="'required'">This field is required.</clr-control-error>
+        </clr-input-container>
+        <button class="btn btn-md btn-success submit" [disabled]="fg.invalid" type="submit">Register</button>
+      </form>
+    </div>
+    <div class="clr-col-lg-1 clr-col-xl-1"></div>
+  </div>
+</div>

@@ -1,0 +1,11 @@
+clr-tabs {
+  min-width: 100%;
+}
+
+.cancel {
+  padding: 1px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  color: red;
+}

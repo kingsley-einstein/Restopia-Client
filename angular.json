@@ -27,7 +27,7 @@
             "styles": [
               "src/styles.css",
               "node_modules/@clr/ui/clr-ui-dark.css",
-              "node_modules/@clr/ui/clr-icons.css"
+              "node_modules/@clr/icons/clr-icons.css"
             ],
             "scripts": [
               "node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js",
