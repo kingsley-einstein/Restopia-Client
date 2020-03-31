@@ -22,7 +22,7 @@
             <button
               class="btn btn-success btn-md"
               [disabled]="url.trim().length === 0"
-              (click)="addToLocalStorage()"
+              (click)="fetchAndUpdate()"
             >
             Send
             </button>
@@ -37,7 +37,7 @@
       <form clrForm>
         <clr-textarea-container>
           <label>Body</label>
-          <textarea class="body" rows="5" clrTextarea (keydown)="formatJson($event)"></textarea>
+          <textarea [ngModelOptions]="{ 'standalone': true }" [(ngModel)]="body" class="body" rows="5" clrTextarea (keydown)="formatJson($event)"></textarea>
         </clr-textarea-container>
       </form>
     </div>
@@ -45,7 +45,7 @@
       <form clrForm>
         <clr-textarea-container>
           <label>Headers</label>
-          <textarea class="headers" rows="5" clrTextarea (keydown)="formatJson($event)"></textarea>
+          <textarea [ngModelOptions]="{ 'standalone': true }" [(ngModel)]="headers" class="headers" rows="5" clrTextarea (keydown)="formatJson($event)"></textarea>
         </clr-textarea-container>
       </form>
     </div>
@@ -55,7 +55,7 @@
       <form clrForm>
         <clr-textarea-container>
           <label>Response</label>
-          <textarea rows="5" clrTextarea readonly></textarea>
+          <textarea class="response" [ngModelOptions]="{'standalone': true}" [(ngModel)]="response" rows="5" clrTextarea readonly></textarea>
         </clr-textarea-container>
       </form>
     </div>

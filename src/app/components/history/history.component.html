@@ -1,6 +1,6 @@
 <div *ngIf="!!service.history">
   <div *ngIf="service.history.length > 0" class="nav-group">
-    <ul class="nav-list">
+    <!-- <ul class="nav-list">
       <li *ngFor="let request of service.history">
         <a class="nav-link" [routerLink]="request.url">
           <span
@@ -11,7 +11,23 @@
           </span> {{request.url}}
         </a>
       </li>
-    </ul>
+    </ul> -->
+    <clr-accordion>
+      <clr-accordion-panel *ngFor="let request of service.history">
+        <clr-accordion-title>
+          <span
+            class="badge"
+            [ngClass]="{'badge-success': request.method === 'POST', 'badge-info': request.method === 'GET', 'badge-danger': request.method === 'DELETE', 'badge-warning': request.method === 'OPTIONS', 'badge-orange': request.method === 'PATCH', 'badge-purple': request.method === 'PUT'}"
+          >
+            {{request.method}}
+          </span>
+          {{request.url}}
+        </clr-accordion-title>
+        <clr-accordion-content>
+          {{ request.response | json }}
+        </clr-accordion-content>
+      </clr-accordion-panel>
+    </clr-accordion>
   </div>
   <div *ngIf="service.history.length === 0" class="nav-group">
     <label>There is no history to show.</label>

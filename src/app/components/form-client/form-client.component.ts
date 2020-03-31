@@ -18,6 +18,9 @@ export class FormClientComponent implements OnInit {
     { name: "OPTIONS", value: "OPTIONS" }
   ];
   method: string = "GET";
+  response: string = "";
+  body: any = "{}";
+  headers: any = "{}";
 
   // @Output()
   // e: EventEmitter<RequestModel[]> = new EventEmitter<RequestModel[]>();
@@ -32,10 +35,25 @@ export class FormClientComponent implements OnInit {
     this.storage.addToStorage({
       method: this.method,
       url: this.url,
-      response: {
-        message: "This is Facebook"
-      }
+      response: JSON.parse(this.response)
     });
+  }
+
+  async fetchData() {
+    const r = await fetch(this.url, {
+      method: this.method,
+      body: (this.method === "GET" || this.method === "HEAD") ? null : JSON.stringify(
+        JSON.parse(this.body)
+      ),
+      headers: JSON.parse(this.headers) || null
+    });
+    const json = await r.json();
+    this.response = JSON.stringify(json, undefined, 2);
+  }
+
+  async fetchAndUpdate() {
+    await this.fetchData();
+    this.addToLocalStorage();
   }
 
   // updateHistory() {
