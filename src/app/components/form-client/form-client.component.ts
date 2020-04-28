@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Input } from "@angular/core";
 import { StorageService } from "../../services";
 // import { RequestModel } from "../../models/request.model";
 
@@ -8,6 +8,9 @@ import { StorageService } from "../../services";
   selector: "app-form-client"
 })
 export class FormClientComponent implements OnInit {
+  @Input()
+  tabName: string = "";
+
   url: string = "";
   allowedMethods: { name: string; value: string; }[] = [
     { name: "GET", value: "GET" },
@@ -29,6 +32,7 @@ export class FormClientComponent implements OnInit {
 
   ngOnInit() {
     console.log("[Form]");
+    console.log(this.tabName);
   }
 
   addToLocalStorage() {

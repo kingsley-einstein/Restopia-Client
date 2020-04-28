@@ -5,7 +5,7 @@ import { NgModule } from "@angular/core";
 import { AppComponent } from "./app.component";
 import { MainComponent, FormClientComponent, SideNavComponent, TabsComponent, HistoryComponent, RegistrationComponent } from "./components";
 import { RoutingModule, ClarityDesignModule, FormModule } from "./modules";
-import { StorageService, HttpService, HistoryService } from "./services";
+import { StorageService, HttpService, HistoryService, TabsHistoryService } from "./services";
 import { ServiceWorkerModule } from "@angular/service-worker";
 import { environment } from "../environments/environment";
 
@@ -30,7 +30,8 @@ import { environment } from "../environments/environment";
   providers: [
     StorageService,
     HttpService,
-    HistoryService
+    HistoryService,
+    TabsHistoryService
   ],
   bootstrap: [AppComponent]
 })

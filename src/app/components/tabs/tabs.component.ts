@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { TabsHistoryService } from "../../services";
 
 @Component({
   templateUrl: "./tabs.component.html",
@@ -16,8 +17,18 @@ export class TabsComponent implements OnInit {
     1: true
   };
 
+  constructor(private tabsHistory: TabsHistoryService) {}
+
   ngOnInit() {
     console.log("[Tabs]");
+    this.addInitialTab();
+    this.getAllPreviouslySavedTabs();
+  }
+
+  addInitialTab() {
+    this.tabs.forEach((tab) => {
+      this.tabsHistory.addTab(tab.name, tab.id);
+    });
   }
 
   addTab() {
@@ -26,6 +37,7 @@ export class TabsComponent implements OnInit {
       name: `Tab ${this.position}`,
       id: this.position
     });
+    this.tabsHistory.addTab(`Tab ${this.position}`, this.position);
     setTimeout(() => {
       this.tabsActiveState[this.position] = true;
     }, 100);
@@ -65,6 +77,7 @@ export class TabsComponent implements OnInit {
     //     this.position--;
     //   }
     // });
+    this.tabsHistory.removeTabAndContent(id);
     setTimeout(() => {
       this.tabsActiveState[this.position] = true;
     }, 100);
@@ -78,5 +91,14 @@ export class TabsComponent implements OnInit {
 
   logTabStates() {
     console.log(this.tabsActiveState);
+  }
+
+  getAllPreviouslySavedTabs() {
+    this.tabsHistory.getTabs().forEach((tab: any) => {
+      const tabToFind = this.tabs.find((t) => t.id === tab.id);
+      if (!tabToFind) {
+        this.tabs.push(tab);
+      }
+    });
   }
 }
