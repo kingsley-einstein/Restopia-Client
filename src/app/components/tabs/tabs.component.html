@@ -8,7 +8,7 @@
     </button>
     <ng-template [(clrIfActive)]="tabsActiveState[tab.id]">
       <clr-tab-content>
-        <app-form-client [tabName]="tab.name"></app-form-client>
+        <app-form-client [tabId]="tab.id"></app-form-client>
       </clr-tab-content>
     </ng-template>
   </clr-tab>

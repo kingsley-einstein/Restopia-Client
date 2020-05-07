@@ -6,6 +6,10 @@ input {
   min-width: 100%;
 }
 
+input.mini {
+  max-width: 50%;
+}
+
 textarea {
   min-width: 100%;
   row-gap: 10;

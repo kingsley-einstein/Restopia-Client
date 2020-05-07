@@ -33,12 +33,47 @@
     <div class="clr-col-lg-1 clr-col-xl-1"></div>
   </div>
   <div class="clr-row">
+    <div class="clr-col-lg-4 clr-col-xl-4 clr-col-sm-12 clr-col-md-4"></div>
+    <div class="clr-col-lg-4 clr-col-xl-4 clr-col-sm-12 clr-col-md-14">
+      <clr-radio-container clrInline>
+        <clr-radio-wrapper *ngFor="let requestBody of requestBodyTypes">
+          <input type="radio" clrRadio [name]="requestBody.name" [value]="requestBody.value" [(ngModel)]="requestBodyType" (click)="saveTabContent()" />
+          <label>{{ requestBody.name }}</label>
+        </clr-radio-wrapper>
+      </clr-radio-container>
+    </div>
+    <div class="clr-col-lg-4 clr-col-xl-4 clr-col-sm-12 clr-col-md-14"></div>
+  </div>
+  <div class="clr-row">
     <div class="clr-col-lg-6 clr-col-xl-6 clr-col-sm-12 clr-col-md-12">
-      <form clrForm>
+      <form *ngIf="requestBodyType === 'json'" clrForm>
         <clr-textarea-container>
           <label>Body</label>
           <textarea [ngModelOptions]="{ 'standalone': true }" [(ngModel)]="body" class="body" rows="5" clrTextarea (keydown)="formatJson($event)"></textarea>
         </clr-textarea-container>
+      </form>
+      <form *ngIf="requestBodyType === 'urlencoded'" clrForm>
+        <div *ngFor="let item of objects" class="clr-row">
+          <div class="clr-col-lg-4 clr-col-xl-4 clr-col-sm-4 clr-col-md-4">
+            <input (input)="watchUrlencodedFields()" placeholder="Key" clrInput [ngModelOptions]="{ 'standalone': true }" [(ngModel)]="item.key" />
+          </div>
+          <div class="clr-col-lg-4 clr-col-xl-4 clr-col-sm-4 clr-col-md-4">
+            <input (input)="watchUrlencodedFields()" placeholder="Value" clrInput [ngModelOptions]="{ 'standalone': true }" [(ngModel)]="item.value" />
+          </div>
+          <div class="clr-col-lg-4 clr-col-xl-4 clr-col-sm-4 clr-col-md-4">
+            <clr-button-group>
+              <clr-button (click)="pushUrlEncoded()" class="btn btn-icon btn-success btn-sm">
+                <clr-icon shape="plus"></clr-icon>
+              </clr-button>
+              <clr-button [disabled]="objects.length === 1" (click)="removeUrlEncoded(item)" class="btn btn-icon btn-danger btn-sm">
+                <clr-icon shape="minus"></clr-icon>
+              </clr-button>
+            </clr-button-group>
+          </div>
+        </div>
+      </form>
+      <form *ngIf="requestBodyType === 'multipart'" clrForm>
+        <input clrInput placeholder="Multipart" />
       </form>
     </div>
     <div class="clr-col-lg-6 clr-col-xl-6 clr-col-sm-12 clr-col-md-12">
