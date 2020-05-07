@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from "@angular/core";
+import { ClrLoadingState } from "@clr/angular";
 import { StorageService, TabsHistoryService } from "../../services";
 // import { RequestModel } from "../../models/request.model";
 
@@ -10,6 +11,8 @@ import { StorageService, TabsHistoryService } from "../../services";
 export class FormClientComponent implements OnInit {
   @Input()
   tabId: string = "";
+
+  loading: ClrLoadingState = ClrLoadingState.DEFAULT;
 
   url: string = "";
   allowedMethods: { name: string; value: string; }[] = [
@@ -27,7 +30,7 @@ export class FormClientComponent implements OnInit {
   ];
   method: string = "GET";
   requestBodyType: string = "json";
-  response: string = "";
+  response: string = "{}";
   body: any = "{}";
   headers: any = "{}";
 
@@ -77,16 +80,22 @@ export class FormClientComponent implements OnInit {
     }
     if (this.requestBodyType === "multipart") {
       const formData: FormData = new FormData();
+      const newBody = {};
       this.formDataObjects.forEach((o) => {
-        formData.append(o.key, o.value, (o.value.name ? o.value.name : ""));
+        formData.set(o.key, o.value);
       });
-      this.body = formData;
+      formData.forEach((i, k) => {
+        newBody[k] = i;
+      });
+      this.body = newBody;
     }
+    this.loading = ClrLoadingState.LOADING;
     const r = await fetch(this.url, {
       method: this.method,
       body: (this.method === "GET" || this.method === "HEAD") ? null : this.body,
       headers: JSON.parse(this.headers) || null
     });
+    this.loading = (r.status >= 400 && r.status <= 599) ? ClrLoadingState.ERROR : ClrLoadingState.SUCCESS;
     const json = await r.json();
     this.response = JSON.stringify(json, undefined, 2);
   }
@@ -145,9 +154,9 @@ export class FormClientComponent implements OnInit {
         url: this.url,
         method: this.method,
         requestBodyType: this.requestBodyType,
-        response: this.response,
-        body: this.body,
-        headers: this.headers
+        response: JSON.parse(this.response),
+        body: JSON.parse(this.body),
+        headers: JSON.parse(this.headers)
       });
     }, 500);
   }
@@ -157,19 +166,30 @@ export class FormClientComponent implements OnInit {
     this.url = content.url;
     this.method = content.method;
     this.requestBodyType = content.requestBodyType;
-    this.response = content.response;
-    this.body = content.body;
+    this.response = JSON.stringify(content.response, undefined, 2);
+    this.body = JSON.stringify(content.body, undefined, 2);
     if (this.requestBodyType === "urlencoded") {
       if (Object.keys(JSON.parse(this.body)).length > 0) {
         this.objects = [];
         Object.keys(JSON.parse(this.body)).forEach((key) => {
-        this.objects.push({
-          key, value: JSON.parse(this.body)[key]
+          this.objects.push({
+            key, value: JSON.parse(this.body)[key]
+          });
         });
-      });
       }
     }
-    this.headers = content.headers;
+    if (this.requestBodyType === "multipart") {
+      if (Object.keys(JSON.parse(this.body)).length > 0) {
+        this.formDataObjects = [];
+        Object.keys(JSON.parse(this.body)).forEach((key) => {
+          this.formDataObjects.push({
+            key, value: JSON.parse(this.body)[key],
+            type: typeof JSON.parse(this.body)[key] === "object" ? "file" : "text"
+          });
+        });
+      }
+    }
+    this.headers = JSON.stringify(content.headers, undefined, 2);
   }
 
   watchUrlencodedFields() {
@@ -196,11 +216,36 @@ export class FormClientComponent implements OnInit {
 
   watchMultipartFields() {
     const formData: FormData = new FormData();
+    const newBody = {};
     this.formDataObjects.forEach((o) => {
-        formData.append(o.key, o.value, (o.value.name ? o.value.name : ""));
+        formData.set(o.key, o.value);
       });
-    this.body = formData;
+    formData.forEach((i, k) => {
+      newBody[k] = i;
+    });
+    this.body = JSON.stringify(newBody, undefined, 2);
     this.saveTabContent();
     console.log(this.formDataObjects);
+  }
+
+  handleFileUpload(event: any, o: any) {
+    const file = event.target.files[0];
+    o.value = file;
+    this.watchMultipartFields();
+    this.saveTabContent();
+    console.log(this.formDataObjects);
+  }
+
+  addMultipart() {
+  this.formDataObjects.push({
+    key: "",
+    type: "text",
+    value: ""
+    });
+  }
+
+  removeMultipart(i: any) {
+    const index = this.formDataObjects.indexOf(i);
+    this.formDataObjects.splice(index, 1);
   }
 }

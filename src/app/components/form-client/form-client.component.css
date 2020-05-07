@@ -15,6 +15,10 @@ textarea {
   row-gap: 10;
 }
 
+clr-button-group {
+  margin: 8px;
+}
+
 .container {
   width: 100%;
 }

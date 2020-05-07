@@ -22,6 +22,7 @@
             <button
               class="btn btn-success btn-md"
               [disabled]="url.trim().length === 0"
+              [clrLoading]="loading"
               (click)="fetchAndUpdate()"
             >
             Send
@@ -55,10 +56,10 @@
       <form *ngIf="requestBodyType === 'urlencoded'" clrForm>
         <div *ngFor="let item of objects" class="clr-row">
           <div class="clr-col-lg-4 clr-col-xl-4 clr-col-sm-4 clr-col-md-4">
-            <input (input)="watchUrlencodedFields()" placeholder="Key" clrInput [ngModelOptions]="{ 'standalone': true }" [(ngModel)]="item.key" />
+            <input type="text" (input)="watchUrlencodedFields()" placeholder="Key" clrInput [ngModelOptions]="{ 'standalone': true }" [(ngModel)]="item.key" />
           </div>
           <div class="clr-col-lg-4 clr-col-xl-4 clr-col-sm-4 clr-col-md-4">
-            <input (input)="watchUrlencodedFields()" placeholder="Value" clrInput [ngModelOptions]="{ 'standalone': true }" [(ngModel)]="item.value" />
+            <input type="text" (input)="watchUrlencodedFields()" placeholder="Value" clrInput [ngModelOptions]="{ 'standalone': true }" [(ngModel)]="item.value" />
           </div>
           <div class="clr-col-lg-4 clr-col-xl-4 clr-col-sm-4 clr-col-md-4">
             <clr-button-group>
@@ -73,7 +74,31 @@
         </div>
       </form>
       <form *ngIf="requestBodyType === 'multipart'" clrForm>
-        <input clrInput placeholder="Multipart" />
+        <div *ngFor="let i of formDataObjects" class="clr-row">
+          <div class="clr-col-lg-3 clr-col-xl-3 clr-col-sm-3 clr-col-md-3">
+            <select clrSelect name="type" [(ngModel)]="i.type" [ngModelOptions]="{ 'standalone': true }" (change)="saveTabContent()">
+              <option value="text">Text</option>
+              <option value="file">File</option>
+            </select>
+          </div>
+          <div class="clr-col-lg-3 clr-col-xl-3 clr-col-sm-3 clr-col-md-3">
+            <input placeholder="Key" clrInput [(ngModel)]="i.key" [ngModelOptions]="{ 'standalone': true }" (input)="watchMultipartFields()" />
+          </div>
+          <div class="clr-col-lg-3 clr-col-xl-3 clr-col-sm-3 clr-col-md-3">
+            <input type="text" *ngIf="i.type === 'text'" placeholder="Value" clrInput [(ngModel)]="i.value" [ngModelOptions]="{ 'standalone': true }" (input)="watchMultipartFields()" />
+            <input type="file" *ngIf="i.type === 'file'" placeholder="Value" clrInput (change)="handleFileUpload($event, i)" />
+          </div>
+          <div class="clr-col-lg-3 clr-col-xl-3 clr-col-sm-3 clr-col-md-3">
+            <clr-button-group>
+              <clr-button (click)="addMultipart()" class="btn btn-icon btn-success btn-sm">
+                <clr-icon shape="plus"></clr-icon>
+              </clr-button>
+              <clr-button [disabled]="formDataObjects.length === 1" (click)="removeMultipart(i)" class="btn btn-icon btn-danger btn-sm">
+                <clr-icon shape="minus"></clr-icon>
+              </clr-button>
+            </clr-button-group>
+          </div>
+        </div>
       </form>
     </div>
     <div class="clr-col-lg-6 clr-col-xl-6 clr-col-sm-12 clr-col-md-12">

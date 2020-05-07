@@ -24,7 +24,7 @@
           {{request.url}}
         </clr-accordion-title>
         <clr-accordion-content>
-          {{ request.response | json }}
+          <pre>{{ request.response | json }}</pre>
         </clr-accordion-content>
       </clr-accordion-panel>
     </clr-accordion>
