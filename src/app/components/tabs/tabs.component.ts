@@ -101,4 +101,8 @@ export class TabsComponent implements OnInit {
       }
     });
   }
+
+  shouldTabBeInOverFlow(tab: any) {
+    return (window.innerHeight > window.innerWidth && tab.id > 3) || (window.innerHeight < window.innerWidth && tab.id > 10);
+  }
 }

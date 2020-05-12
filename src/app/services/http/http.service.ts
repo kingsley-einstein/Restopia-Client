@@ -7,7 +7,7 @@ export class HttpService {
   constructor(private http: HttpClient) {}
 
   createUser(model: APIAuthModel) {
-    return this.http.post<APIRequestModel>(`${Config.URL}/user`, model);
+    return this.http.post<APIResponseModel>(`${Config.URL}/user`, model);
   }
 
   logUserIn(model: APIAuthModel) {

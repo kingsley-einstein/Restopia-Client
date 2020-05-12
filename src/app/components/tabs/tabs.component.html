@@ -1,6 +1,6 @@
 <clr-tabs>
   <clr-tab *ngFor="let tab of tabs">
-    <button clrTabLink [id]="tab.id" (click)="logTabStates()">
+    <button clrTabLink [clrTabLinkInOverflow]="shouldTabBeInOverFlow(tab)" [id]="tab.id" (click)="logTabStates()">
       {{tab.name}}
       <button *ngIf="tabs.length > 1" class="cancel" (click)="removeTab(tab.id)">
         <clr-icon shape="close"></clr-icon>

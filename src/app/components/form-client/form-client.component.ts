@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { ClrLoadingState } from "@clr/angular";
-import { StorageService, TabsHistoryService } from "../../services";
+import { StorageService, TabsHistoryService, HttpService } from "../../services";
+import { environment } from "../../../environments/environment";
 // import { RequestModel } from "../../models/request.model";
 
 @Component({
@@ -13,6 +14,9 @@ export class FormClientComponent implements OnInit {
   tabId: string = "";
 
   loading: ClrLoadingState = ClrLoadingState.DEFAULT;
+  saveRequestLoading: ClrLoadingState = ClrLoadingState.DEFAULT;
+
+  canSaveRequests: boolean = false;
 
   url: string = "";
   allowedMethods: { name: string; value: string; }[] = [
@@ -33,6 +37,7 @@ export class FormClientComponent implements OnInit {
   response: string = "{}";
   body: any = "{}";
   headers: any = "{}";
+  statusCode: number = 0;
 
   // Urlencoded keys
   objects: { key: string; value: string; }[] = [
@@ -46,7 +51,7 @@ export class FormClientComponent implements OnInit {
   // @Output()
   // e: EventEmitter<RequestModel[]> = new EventEmitter<RequestModel[]>();
 
-  constructor(private storage: StorageService, private tabHistory: TabsHistoryService) {}
+  constructor(private storage: StorageService, private tabHistory: TabsHistoryService, private http: HttpService) {}
 
   ngOnInit() {
     console.log("[Form]");
@@ -57,13 +62,14 @@ export class FormClientComponent implements OnInit {
     if (this.tabHistory.getTabContent(this.tabId)) {
       this.getTabContent();
     }
+    this.canSaveRequest();
   }
 
   addToLocalStorage() {
     this.storage.addToStorage({
       method: this.method,
       url: this.url,
-      response: JSON.parse(this.response)
+      response: JSON.parse(this.response),
     });
   }
 
@@ -71,6 +77,7 @@ export class FormClientComponent implements OnInit {
     if (this.requestBodyType === "json") {
       this.body = JSON.stringify(JSON.parse(this.body));
     }
+
     if (this.requestBodyType === "urlencoded") {
       const newBody = {};
       this.objects.forEach((o) => {
@@ -78,6 +85,7 @@ export class FormClientComponent implements OnInit {
       });
       this.body = JSON.stringify(newBody, undefined, 2);
     }
+
     if (this.requestBodyType === "multipart") {
       const formData: FormData = new FormData();
       const newBody = {};
@@ -87,15 +95,36 @@ export class FormClientComponent implements OnInit {
       formData.forEach((i, k) => {
         newBody[k] = i;
       });
-      this.body = newBody;
+      this.body = JSON.stringify(newBody, undefined, 2);
     }
     this.loading = ClrLoadingState.LOADING;
-    const r = await fetch(this.url, {
+
+    const mainRequestBody = {
+      type: this.requestBodyType,
       method: this.method,
-      body: (this.method === "GET" || this.method === "HEAD") ? null : this.body,
-      headers: JSON.parse(this.headers) || null
-    });
-    this.loading = (r.status >= 400 && r.status <= 599) ? ClrLoadingState.ERROR : ClrLoadingState.SUCCESS;
+      url: this.url,
+      body: JSON.parse(this.body),
+      headers: JSON.parse(this.headers)
+    };
+
+    const outUrl = (this.url.startsWith("http://localhost:") || this.url.startsWith("localhost:")) ?
+                  this.url : environment.proxy;
+    const outGoingBody = (this.url.startsWith("http://localhost:") || this.url.startsWith("localhost:")) ?
+                    JSON.stringify(this.body) : JSON.stringify(mainRequestBody);
+    const outGoingHeaders = (this.url.startsWith("http://localhost:") || this.url.startsWith("localhost:")) ?
+                      JSON.parse(this.headers) : {};
+    const outGoingMethod = (this.url.startsWith("http://localhost:") || this.url.startsWith("localhost:")) ?
+                  this.method : "POST";
+
+    const r = await fetch(outUrl, {
+      method: outGoingMethod,
+      body: (this.method !== "GET" && this.method !== "HEAD") ? outGoingBody : null,
+      headers: outGoingHeaders
+    })
+    .catch((err) => null);
+
+    this.loading = (!r || (r.status >= 400 && r.status <= 599)) ? ClrLoadingState.ERROR : ClrLoadingState.SUCCESS;
+    this.statusCode = r.status || 500;
     const json = await r.json();
     this.response = JSON.stringify(json, undefined, 2);
   }
@@ -247,5 +276,30 @@ export class FormClientComponent implements OnInit {
   removeMultipart(i: any) {
     const index = this.formDataObjects.indexOf(i);
     this.formDataObjects.splice(index, 1);
+  }
+
+  canSaveRequest() {
+    if (localStorage.getItem("token")) {
+      this.canSaveRequests = true;
+    }
+  }
+
+  createRequest() {
+    this.saveRequestLoading = ClrLoadingState.LOADING;
+    this.http.createRequest({
+      url: this.url,
+      method: this.method,
+      headers: JSON.parse(this.headers),
+      exact: JSON.parse(this.body),
+      response: JSON.parse(this.response)
+    })
+    .subscribe((res) => {
+      console.log(res);
+      this.saveRequestLoading = ClrLoadingState.SUCCESS;
+    },
+    err => {
+      this.saveRequestLoading = ClrLoadingState.ERROR;
+      console.log(err.error);
+    });
   }
 }

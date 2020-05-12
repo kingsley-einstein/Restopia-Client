@@ -27,6 +27,13 @@
             >
             Send
             </button>
+            <button
+              class="btn btn-info btn-md"
+              [disabled]="!canSaveRequests || (url.trim().length === 0 || response.trim().length === 0)"
+              (click)="createRequest()"
+            >
+            Save Request
+          </button>
           </div>
         </div>
       </form>
@@ -75,20 +82,20 @@
       </form>
       <form *ngIf="requestBodyType === 'multipart'" clrForm>
         <div *ngFor="let i of formDataObjects" class="clr-row">
-          <div class="clr-col-lg-3 clr-col-xl-3 clr-col-sm-3 clr-col-md-3">
+          <div class="clr-col-lg-2 clr-col-xl-2 clr-col-sm-2 clr-col-md-2">
             <select clrSelect name="type" [(ngModel)]="i.type" [ngModelOptions]="{ 'standalone': true }" (change)="saveTabContent()">
               <option value="text">Text</option>
               <option value="file">File</option>
             </select>
           </div>
-          <div class="clr-col-lg-3 clr-col-xl-3 clr-col-sm-3 clr-col-md-3">
+          <div class="clr-col-lg-4 clr-col-xl-4 clr-col-sm-4 clr-col-md-4">
             <input placeholder="Key" clrInput [(ngModel)]="i.key" [ngModelOptions]="{ 'standalone': true }" (input)="watchMultipartFields()" />
           </div>
-          <div class="clr-col-lg-3 clr-col-xl-3 clr-col-sm-3 clr-col-md-3">
+          <div class="clr-col-lg-4 clr-col-xl-4 clr-col-sm-4 clr-col-md-4">
             <input type="text" *ngIf="i.type === 'text'" placeholder="Value" clrInput [(ngModel)]="i.value" [ngModelOptions]="{ 'standalone': true }" (input)="watchMultipartFields()" />
             <input type="file" *ngIf="i.type === 'file'" placeholder="Value" clrInput (change)="handleFileUpload($event, i)" />
           </div>
-          <div class="clr-col-lg-3 clr-col-xl-3 clr-col-sm-3 clr-col-md-3">
+          <div class="clr-col-lg-2 clr-col-xl-2 clr-col-sm-2 clr-col-md-2">
             <clr-button-group>
               <clr-button (click)="addMultipart()" class="btn btn-icon btn-success btn-sm">
                 <clr-icon shape="plus"></clr-icon>
@@ -114,7 +121,15 @@
     <div class="clr-col-lg-12 clr-col-xl-12 clr-col-sm-12 clr-col-md-12">
       <form clrForm>
         <clr-textarea-container>
-          <label>Response</label>
+          <label>
+            Response
+            <span
+              class="badge"
+              [ngClass]="{'badge-success': statusCode >= 200 && statusCode <= 299, 'badge-info': statusCode >= 300 && statusCode <= 399, 'badge-warning': statusCode >= 400 && statusCode <= 499, 'badge-danger': statusCode >= 500}"
+            >
+            {{ statusCode }}
+          </span>
+          </label>
           <textarea class="response" [ngModelOptions]="{'standalone': true}" [(ngModel)]="response" rows="5" clrTextarea readonly></textarea>
         </clr-textarea-container>
       </form>

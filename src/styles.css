@@ -1,4 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
+@import "~@clr/ui/clr-ui-dark.css";
+
 ::-webkit-scrollbar {
   display: none;
+}
+
+pre {
+  width: 100%;
 }

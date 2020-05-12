@@ -4,17 +4,38 @@
   </div>
   <div class="header-nav">
     <a class="nav-link nav-text" routerLink="client" routerLinkActive="active">Home</a>
-    <a class="nav-link nav-text" routerLink="registration" routerLinkActive="active">New Account</a>
+    <a *ngIf="!user" class="nav-link nav-text" routerLink="registration" routerLinkActive="active">New Account</a>
+    <!-- <span *ngIf="user" class="nav-text">
+      <h4>Session ID:</h4>
+      <small>{{ user.token }}</small>
+    </span> -->
   </div>
   <div class="header-actions">
+    <span *ngIf="user" class="nav-text">
+      {{ user.email }}
+    </span>
     <clr-dropdown>
       <button class="nav-icon" clrDropdownTrigger>
         <clr-icon shape="user"></clr-icon>
         <clr-icon shape="caret down"></clr-icon>
       </button>
       <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
-        <a href="hi" clrDropdownItem>About</a>
-        <a href="hi" clrDropdownItem>Preferences</a>
+        <a *ngIf="!user" clrDropdownItem routerLink="login">
+          <clr-icon shape="login"></clr-icon>
+          <span>Login</span>
+        </a>
+        <a *ngIf="!user" clrDropdownItem routerLink="registration">
+          <clr-icon shape="assign-user"></clr-icon>
+          <span>Register</span>
+        </a>
+        <a *ngIf="user" clrDropdownItem>
+          <clr-icon shape="star"></clr-icon>
+          <span>Requests</span>
+        </a>
+        <button *ngIf="user" clrDropdownItem (click)="logOut()">
+          <clr-icon shape="logout"></clr-icon>
+          <span>Logout</span>
+        </button>
       </clr-dropdown-menu>
     </clr-dropdown>
   </div>

@@ -1,5 +1,5 @@
 export interface RequestModel {
-  method: string;
   url: string;
-  response: object;
+  response: object | string;
+  method: string;
 }

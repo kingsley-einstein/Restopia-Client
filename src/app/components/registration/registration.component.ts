@@ -1,5 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { AbstractControl, FormGroup, FormBuilder, FormControl, Validators, ValidatorFn } from "@angular/forms";
+import { Router } from "@angular/router";
+import { ClrLoadingState } from "@clr/angular";
+import { HttpService } from "../../services";
 
 @Component({
   templateUrl: "./registration.component.html",
@@ -17,7 +20,10 @@ export class RegistrationComponent implements OnInit {
     Validators.required, ComparePassword(this.password)
   ]);
 
-  constructor(fb: FormBuilder) {
+  loading: ClrLoadingState = ClrLoadingState.DEFAULT;
+  error: string = "";
+
+  constructor(fb: FormBuilder, private http: HttpService, private router: Router) {
     this.fg = fb.group({
       email: this.email,
       password: this.password,
@@ -27,6 +33,29 @@ export class RegistrationComponent implements OnInit {
 
   ngOnInit() {
     console.log("[Registration]");
+  }
+
+  createUser($event) {
+    $event.preventDefault();
+    this.loading = ClrLoadingState.LOADING;
+    const { email, password } = this.fg.value;
+    const newUser = { email, password };
+    this.http.createUser(newUser).subscribe((res) => {
+      if (res.data.token) {
+        localStorage.setItem("token", res.data.token);
+        this.loading = ClrLoadingState.SUCCESS;
+        this.router.navigateByUrl("/main/client");
+        window.location.reload();
+      }
+      if (res.code >= 400) {
+        this.error = res.data;
+        this.loading = ClrLoadingState.ERROR;
+      }
+    },
+    err => {
+      this.error = err.error.data;
+      this.loading = ClrLoadingState.ERROR;
+    });
   }
 }
 
