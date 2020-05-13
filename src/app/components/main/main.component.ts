@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { AuthService } from "../../services";
+import { AppComponent } from "../../app.component";
 
 @Component({
   templateUrl: "./main.component.html",
@@ -11,7 +12,7 @@ export class MainComponent implements OnInit {
 
   user: any = null;
 
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(private auth: AuthService, private router: Router, private app: AppComponent) {}
 
   ngOnInit() {
     console.log("[MainComponent]");
@@ -33,9 +34,15 @@ export class MainComponent implements OnInit {
 
   logOut() {
     if (localStorage.getItem("user")) {
-      this.auth.logUserOut();
-      this.router.navigateByUrl("/");
-      window.location.reload();
+      this.auth.logUserOut().subscribe((res) => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        this.app.showMessage(res.data);
+        setTimeout(() => {
+          this.router.navigateByUrl("/");
+          window.location.reload();
+        }, 1000);
+      });
     }
   }
 }

@@ -7,4 +7,9 @@
 
 pre {
   width: 100%;
+  border: none;
+}
+
+code {
+  white-space: pre-wrap;
 }

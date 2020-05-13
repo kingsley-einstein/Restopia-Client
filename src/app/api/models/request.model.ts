@@ -1,7 +1,8 @@
 export interface APIRequestModel {
   url: string;
-  exact: object | string;
-  response: object | string;
+  exact: any;
+  response: any;
   method: string;
-  headers?: object | string;
+  headers?: any;
+  _id?: string;
 }

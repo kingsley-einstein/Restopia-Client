@@ -11,14 +11,17 @@ import {
   TabsComponent,
   HistoryComponent,
   RegistrationComponent,
-  LoginComponent
+  LoginComponent,
+  RequestsComponent,
+  SettingsComponent
 } from "./components";
 import { RoutingModule, ClarityDesignModule, FormModule } from "./modules";
-import { StorageService, HttpService, HistoryService, TabsHistoryService, AuthService } from "./services";
+import { StorageService, HttpService, HistoryService, TabsHistoryService, AuthService, SettingsService } from "./services";
 import { ServiceWorkerModule } from "@angular/service-worker";
 import { environment } from "../environments/environment";
 
 import { CustomHttpInterceptor } from "./config/httpinterceptor";
+import { Activatable } from "./config/canactivate";
 
 @NgModule({
   declarations: [
@@ -29,12 +32,14 @@ import { CustomHttpInterceptor } from "./config/httpinterceptor";
     TabsComponent,
     HistoryComponent,
     RegistrationComponent,
-    LoginComponent
+    LoginComponent,
+    RequestsComponent,
+    SettingsComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    ServiceWorkerModule.register("ngsw-worker.js", { enabled: environment.production }),
+    ServiceWorkerModule.register("ngsw-worker.js", { enabled: environment.production, scope: "/" }),
     RoutingModule,
     ClarityDesignModule,
     FormModule,
@@ -46,6 +51,9 @@ import { CustomHttpInterceptor } from "./config/httpinterceptor";
     HistoryService,
     TabsHistoryService,
     AuthService,
+    SettingsService,
+    AppComponent,
+    Activatable,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: CustomHttpInterceptor,

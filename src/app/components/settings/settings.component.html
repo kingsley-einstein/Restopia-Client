@@ -1,0 +1,17 @@
+<clr-toggle-container>
+  <clr-toggle-wrapper>
+    <input type="checkbox" (click)="switchTabsHistory($event)" [checked]="maintainTabsHistory === 'on'" clrToggle name="tab_history" />
+    <label>Keep tabs history</label>
+  </clr-toggle-wrapper>
+  <clr-toggle-wrapper>
+    <input type="checkbox" (click)="switchTabsContent($event)" [checked]="deleteTabsContent === 'off'" clrToggle name="tab_content" />
+    <label>Keep tabs content</label>
+  </clr-toggle-wrapper>
+</clr-toggle-container>
+<!-- <div class="nav-divider"></div>
+<clr-toggle-container>
+  <clr-toggle-wrapper>
+    <input type="checkbox" (click)="switchKeepSignIn($event)" [checked]="keepSignIn === 'on'" clrToggle name="sign_in" />
+    <label>Stay signed in</label>
+  </clr-toggle-wrapper>
+</clr-toggle-container> -->

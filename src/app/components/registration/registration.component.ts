@@ -44,8 +44,6 @@ export class RegistrationComponent implements OnInit {
       if (res.data.token) {
         localStorage.setItem("token", res.data.token);
         this.loading = ClrLoadingState.SUCCESS;
-        this.router.navigateByUrl("/main/client");
-        window.location.reload();
       }
       if (res.code >= 400) {
         this.error = res.data;
@@ -55,6 +53,12 @@ export class RegistrationComponent implements OnInit {
     err => {
       this.error = err.error.data;
       this.loading = ClrLoadingState.ERROR;
+    },
+    () => {
+        this.router.navigateByUrl("/");
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
     });
   }
 }

@@ -70,6 +70,7 @@ export class FormClientComponent implements OnInit {
       method: this.method,
       url: this.url,
       response: JSON.parse(this.response),
+      status: this.statusCode
     });
   }
 
@@ -107,13 +108,29 @@ export class FormClientComponent implements OnInit {
       headers: JSON.parse(this.headers)
     };
 
-    const outUrl = (this.url.startsWith("http://localhost:") || this.url.startsWith("localhost:")) ?
+    const outUrl = (
+      this.url.startsWith("http://localhost:")
+    || this.url.startsWith("localhost:")
+    || this.url.startsWith("http://127.0.0.1:")
+    || this.url.startsWith("127.0.0.1:")) ?
                   this.url : environment.proxy;
-    const outGoingBody = (this.url.startsWith("http://localhost:") || this.url.startsWith("localhost:")) ?
+    const outGoingBody = (
+        this.url.startsWith("http://localhost:")
+      || this.url.startsWith("localhost:")
+      || this.url.startsWith("http://127.0.0.1:")
+      || this.url.startsWith("127.0.0.1:")) ?
                     JSON.stringify(this.body) : JSON.stringify(mainRequestBody);
-    const outGoingHeaders = (this.url.startsWith("http://localhost:") || this.url.startsWith("localhost:")) ?
+    const outGoingHeaders = (
+      this.url.startsWith("http://localhost:")
+      || this.url.startsWith("localhost:")
+      || this.url.startsWith("http://127.0.0.1:")
+      || this.url.startsWith("127.0.0.1:")) ?
                       JSON.parse(this.headers) : {};
-    const outGoingMethod = (this.url.startsWith("http://localhost:") || this.url.startsWith("localhost:")) ?
+    const outGoingMethod = (
+        this.url.startsWith("http://localhost:")
+      || this.url.startsWith("localhost:")
+      || this.url.startsWith("http://127.0.0.1:")
+      || this.url.startsWith("127.0.0.1:")) ?
                   this.method : "POST";
 
     const r = await fetch(outUrl, {
@@ -185,7 +202,8 @@ export class FormClientComponent implements OnInit {
         requestBodyType: this.requestBodyType,
         response: JSON.parse(this.response),
         body: JSON.parse(this.body),
-        headers: JSON.parse(this.headers)
+        headers: JSON.parse(this.headers),
+        status: this.statusCode
       });
     }, 500);
   }
@@ -195,6 +213,7 @@ export class FormClientComponent implements OnInit {
     this.url = content.url;
     this.method = content.method;
     this.requestBodyType = content.requestBodyType;
+    this.statusCode = content.status;
     this.response = JSON.stringify(content.response, undefined, 2);
     this.body = JSON.stringify(content.body, undefined, 2);
     if (this.requestBodyType === "urlencoded") {

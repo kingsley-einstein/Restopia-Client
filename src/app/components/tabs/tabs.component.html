@@ -13,7 +13,7 @@
     </ng-template>
   </clr-tab>
   <clr-tab>
-    <button clrTabLink (click)="addTab()">
+    <button [disabled]="tabs.length === 17" clrTabLink (click)="addTab()">
       <clr-icon shape="plus"></clr-icon>
     </button>
     <!-- <ng-template [(clrIfActive)]="btnActive">

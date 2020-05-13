@@ -20,6 +20,10 @@ export class TabsHistoryService {
     );
   }
 
+  clearTabsHistory() {
+    localStorage.removeItem("tabs");
+  }
+
   removeTabAndContent(id: any) {
     let tabs = JSON.parse(localStorage.getItem("tabs"));
     tabs = tabs.filter((tab: any) => tab.id !== id);
@@ -35,5 +39,14 @@ export class TabsHistoryService {
     return localStorage.getItem(id) ? JSON.parse(
       localStorage.getItem(id)
     ) : null;
+  }
+
+  clearAllTabsContent() {
+    if (localStorage.getItem("tabs")) {
+      const tabs = JSON.parse(localStorage.getItem("tabs"));
+      tabs.forEach((tab: any) => {
+        localStorage.removeItem(tab.id.toString());
+      });
+    }
   }
 }

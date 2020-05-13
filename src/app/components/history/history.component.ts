@@ -22,6 +22,11 @@ export class HistoryComponent implements OnInit {
     // console.log(this.requests);
   }
 
+  clearHistory() {
+    this.service.clean();
+    window.location.reload();
+  }
+
   // subscribeToHistory() {
   //   this.requestSubject.subscribe((allRequests) => {
   //     this.requests = allRequests;

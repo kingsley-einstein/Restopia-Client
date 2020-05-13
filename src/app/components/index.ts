@@ -5,3 +5,5 @@ export * from "./tabs/tabs.component";
 export * from "./history/history.component";
 export * from "./registration/registration.component";
 export * from "./login/login.component";
+export * from "./requests/requests.component";
+export * from "./settings/settings.component";

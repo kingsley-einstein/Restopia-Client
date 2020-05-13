@@ -14,4 +14,8 @@ export class HistoryService {
       this.history = JSON.parse(this.storage.getItems());
     }
   }
+
+  public clean() {
+    this.storage.emptyStorage();
+  }
 }

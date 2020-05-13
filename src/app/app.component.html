@@ -1,4 +1,36 @@
-
+<div
+  *ngIf="shouldDisplayTopLevelAlert"
+  class="alert alert-app-level"
+  [ngClass]="{'alert-danger': type === 'danger', 'alert-info': type === 'info', 'alert-warning': type === 'warning'}"
+  role="alert"
+>
+  <div class="alert-items">
+    <div class="alert-item static">
+      <div class="alert-icon-wrapper">
+        <clr-icon class="alert-icon" *ngIf="type === 'info'" shape="info-circle"></clr-icon>
+        <clr-icon class="alert-icon" *ngIf="type === 'danger'" shape="exclamation-circle"></clr-icon>
+        <clr-icon class="alert-icon" *ngIf="type === 'warning'" shape="exclamation-triangle"></clr-icon>
+      </div>
+      <div class="alert-text">
+        {{ alertText }}
+      </div>
+    </div>
+  </div>
+  <button (click)="hideAlert()" type="button" class="close" aria-label="Close">
+    <clr-icon aria-hidden="true" shape="close"></clr-icon>
+  </button>
+</div>
+<div *ngIf="shouldDisplayOverlay" class="overlay">
+  <div class="clr-row margin">
+    <div class="clr-col-lg-4 clr-col-sm-4 clr-col-xl-4 clr-md-4"></div>
+    <div class="clr-col-lg-4 clr-col-sm-4 clr-col-xl-4 clr-md-4">
+      <span class="spinner spinner-inverse">
+        Loading...
+      </span>
+    </div>
+    <div class="clr-col-lg-4 clr-col-sm-4 clr-col-xl-4 clr-md-4"></div>
+  </div>
+</div>
   <clr-main-container>
     <router-outlet></router-outlet>
   </clr-main-container>

@@ -30,6 +30,7 @@
             <button
               class="btn btn-info btn-md"
               [disabled]="!canSaveRequests || (url.trim().length === 0 || response.trim().length === 0)"
+              [clrLoading]="saveRequestLoading"
               (click)="createRequest()"
             >
             Save Request

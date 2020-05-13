@@ -35,6 +35,6 @@ export class HttpService {
   }
 
   getAllRequests() {
-    return this.http.get<APIRequestModel>(`${Config.URL}/request`);
+    return this.http.get<APIResponseModel>(`${Config.URL}/request`);
   }
 }

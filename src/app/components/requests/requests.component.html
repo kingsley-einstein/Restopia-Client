@@ -1,0 +1,82 @@
+<div *ngIf="loading" class="spinner-flex">
+  <span class="spinner spinner-inverse spinner-inline">
+    Loading...
+  </span>
+</div>
+
+<div *ngIf="showModal">
+  <div class="modal">
+    <div class="modal-dialog" role="dialog" aria-hidden="true">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button aria-label="Close" (click)="dismissModal()" class="close" type="button">
+            <clr-icon aria-hidden="true" shape="close"></clr-icon>
+          </button>
+          <h3 class="modal-title">
+            <span
+              class="badge"
+              [ngClass]="{'badge-success': request.method === 'POST', 'badge-info': request.method === 'GET', 'badge-danger': request.method === 'DELETE', 'badge-warning': request.method === 'OPTIONS', 'badge-orange': request.method === 'PATCH', 'badge-purple': request.method === 'PUT'}"
+            >
+              {{request.method}}
+            </span>
+          </h3>
+        </div>
+        <div class="modal-body">
+          <p>
+            {{ request.url }}
+          </p>
+          <p>
+            <code>{{ parse(request.exact) | json }}</code>
+          </p>
+          <p>
+            <code>{{ parse(request.response) | json }}</code>
+          </p>
+          <p>
+            <code>{{ parse(request.headers) | json }}</code>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-backdrop" aria-hidden="true"></div>
+</div>
+
+<div *ngIf="requests.length > 0" class="clr-row">
+  <div *ngFor="let request of requests" class="clr-col-lg-3 clr-col-xl-3 clr-col-md-4 clr-col-sm-12">
+    <div class="card">
+      <div class="card-header">
+        <span
+          class="badge"
+          [ngClass]="{'badge-success': request.method === 'POST', 'badge-info': request.method === 'GET', 'badge-danger': request.method === 'DELETE', 'badge-warning': request.method === 'OPTIONS', 'badge-orange': request.method === 'PATCH', 'badge-purple': request.method === 'PUT'}"
+        >
+          {{request.method}}
+        </span>
+      </div>
+      <div class="card-block">
+        <div class="card-title">
+          {{ request.url }}
+        </div>
+        <div class="card-text">
+          <code>{{ parse(request.exact) | json }}</code>
+        </div>
+        <div class="card-text">
+          <code>{{ parse(request.response) | json }}</code>
+        </div>
+        <div class="card-text">
+          <code>{{ parse(request.headers) | json }}</code>
+        </div>
+      </div>
+      <div class="card-footer">
+        <button class="btn btn-sm btn-info" (click)="displayRequestInfo(request)">Show Info</button>
+        <button class="btn btn-sm btn-danger" (click)="deleteRequest(request)">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="requests.length === 0">
+  <span>
+    <clr-icon shape="exclamation-triangle"></clr-icon>
+    No saved requests
+  </span>
+</div>

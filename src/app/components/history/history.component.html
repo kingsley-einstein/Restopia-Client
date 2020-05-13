@@ -12,6 +12,7 @@
         </a>
       </li>
     </ul> -->
+    <button class="btn btn-sm btn-link" (click)="clearHistory()">Clear History</button>
     <clr-accordion>
       <clr-accordion-panel *ngFor="let request of service.history">
         <clr-accordion-title>
@@ -24,7 +25,7 @@
           {{request.url}}
         </clr-accordion-title>
         <clr-accordion-content>
-          <pre>{{ request.response | json }}</pre>
+          <code>{{ request.response | json }}</code>
         </clr-accordion-content>
       </clr-accordion-panel>
     </clr-accordion>

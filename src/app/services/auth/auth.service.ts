@@ -45,12 +45,7 @@ export class AuthService {
   }
 
   logUserOut() {
-    this.http.logUserOut().subscribe((res) => {
-      if (typeof res.data === "string" || res.code === 200) {
-        localStorage.removeItem("user");
-        localStorage.removeItem("token");
-      }
-    });
+    return this.http.logUserOut();
   }
 
   getError() {
