@@ -100,7 +100,7 @@ export class FormClientComponent implements OnInit {
     }
     this.loading = ClrLoadingState.LOADING;
 
-    if (!this.url.startsWith("http://")) {
+    if (!this.url.startsWith("http://") || !this.url.startsWith("https://")) {
       this.url = "http://" + this.url;
     }
 
