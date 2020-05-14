@@ -15,7 +15,7 @@
           </div>
           <div class="clr-col-lg-8 clr-col-xl-8 clr-col-sm-8 clr-col-md-8">
             <clr-input-container>
-              <input clrInput type="text" placeholder="Enter Url" [(ngModel)]="url" [ngModelOptions]="{ 'standalone' : true }" />
+              <input clrInput type="text" placeholder="Enter Url" [(ngModel)]="url" [ngModelOptions]="{ 'standalone' : true }" (input)="saveTabContent()" />
             </clr-input-container>
           </div>
           <div class="clr-col-lg-2 clr-col-xl-2 clr-col-sm-2 clr-col-md-2">

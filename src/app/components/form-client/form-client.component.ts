@@ -108,6 +108,10 @@ export class FormClientComponent implements OnInit {
       headers: JSON.parse(this.headers)
     };
 
+    if (!this.url.startsWith("http://")) {
+      this.url = "http://" + this.url;
+    }
+
     const outUrl = (
       this.url.startsWith("http://localhost:")
     || this.url.startsWith("localhost:")
