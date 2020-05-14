@@ -129,7 +129,9 @@ export class FormClientComponent implements OnInit {
       || this.url.startsWith("localhost:")
       || this.url.startsWith("http://127.0.0.1:")
       || this.url.startsWith("127.0.0.1:")) ?
-                      JSON.parse(this.headers) : {};
+                      JSON.parse(this.headers) : {
+                        "Content-Type": "application/json"
+                      };
     const outGoingMethod = (
         this.url.startsWith("http://localhost:")
       || this.url.startsWith("localhost:")
