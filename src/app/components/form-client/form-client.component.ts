@@ -100,6 +100,10 @@ export class FormClientComponent implements OnInit {
     }
     this.loading = ClrLoadingState.LOADING;
 
+    if (!this.url.startsWith("http://")) {
+      this.url = "http://" + this.url;
+    }
+
     const mainRequestBody = {
       type: this.requestBodyType,
       method: this.method,
@@ -107,10 +111,6 @@ export class FormClientComponent implements OnInit {
       body: JSON.parse(this.body),
       headers: JSON.parse(this.headers)
     };
-
-    if (!this.url.startsWith("http://")) {
-      this.url = "http://" + this.url;
-    }
 
     const outUrl = (
       this.url.startsWith("http://localhost:")
