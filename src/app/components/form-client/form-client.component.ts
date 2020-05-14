@@ -100,7 +100,7 @@ export class FormClientComponent implements OnInit {
     }
     this.loading = ClrLoadingState.LOADING;
 
-    if (!this.url.startsWith("http://") || !this.url.startsWith("https://")) {
+    if (!this.url.startsWith("http://") && !this.url.startsWith("https://")) {
       this.url = "http://" + this.url;
     }
 
@@ -137,9 +137,15 @@ export class FormClientComponent implements OnInit {
       || this.url.startsWith("127.0.0.1:")) ?
                   this.method : "POST";
 
+    // let finalBody = null;
+
+    // if ((!this.url.includes("localhost") || !this.url.includes("127.0.0.1")) && (this.method)) {
+    //   finalBody = outGoingBody;
+    // }
+
     const r = await fetch(outUrl, {
       method: outGoingMethod,
-      body: (this.method !== "GET" && this.method !== "HEAD") ? outGoingBody : null,
+      body: (outGoingMethod !== "GET" && outGoingMethod !== "HEAD") ? outGoingBody : null,
       headers: outGoingHeaders
     })
     .catch((err) => null);
