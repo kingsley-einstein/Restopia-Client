@@ -1,7 +1,7 @@
 FROM node:10-alpine
 COPY src ./src
 COPY package*.json ./
-COPY angular.json ./
+COPY angular.json ./angular-cli.json
 COPY tsconfig*.json ./
 COPY ngsw-config.json ./
 COPY browserslist ./
